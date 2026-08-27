@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Jornada do Elétron - Simulador Interativo</title>
+    
+    <style>
+        :root {
+            --bg-color: #071019;
+            --panel-bg: #0d1823;
+            --panel-bg-2: #101f2c;
+            --text-color: #f4f8fb;
+            --muted: #a7b9c6;
+            --accent: #4bdcff;
+            --accent-glow: rgba(75, 220, 255, 0.35);
+            --free-color: #5ce1a6;
+            --barrier: #ffd166;
+            --line: #223646;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 80% 0%, #143149 0, #071019 32%, #04090e 78%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 34px 20px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin: 0 0 6px;
+            font-size: clamp(36px, 6vw, 64px);
+            line-height: .96;
+            letter-spacing: -0.05em;
+        }
+
+        p.subtitle {
+            color: var(--muted);
+            margin: 0 0 26px;
+            font-size: 17px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: min(900px, 100%);
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(6, 15, 23, 0.72);
+            backdrop-filter: blur(12px);
+        }
+
+        .tab-btn {
+            background-color: #102332;
+            color: #d6e3eb;
+            border: 1px solid #2a4659;
+            padding: 10px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .18s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #173147;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #00141b;
+            font-weight: 800;
+            box-shadow: 0 0 0 1px rgba(255,255,255,.05), 0 0 22px var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        .container {
+            display: none;
+            width: min(900px, 100%);
+            background:
+                linear-gradient(180deg, rgba(15,29,42,.98), rgba(8,17,25,.98));
+            padding: 20px;
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            box-shadow: 0 18px 60px rgba(0,0,0,.28);
+        }
+
+        .container.active { display: block; }
+
+        .container h2 {
+            margin: 2px 0 16px;
+            font-size: clamp(22px, 3vw, 32px);
+            letter-spacing: -0.03em;
+        }
+
+        canvas {
+            background:
+                linear-gradient(rgba(130,170,200,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(130,170,200,.05) 1px, transparent 1px),
+                #07111a;
+            background-size: 45px 45px;
+            border-radius: 16px;
+            width: 100%;
+            height: 300px;
+            border: 1px solid #203646;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #091720;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #203646;
+        }
+
+        .control-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .control-group label {
+            flex: 1;
+            font-weight: 700;
+            color: #d9e5ec;
+        }
+
+        .control-group input[type="range"] {
+            flex: 2;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .value-display {
+            width: 150px;
+            text-align: right;
+            color: var(--accent);
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .description {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #bed0db;
+            line-height: 1.55;
+            padding: 13px 15px;
+            border-left: 3px solid var(--accent);
+            background: rgba(75,220,255,.06);
+            border-radius: 10px;
+        }
+
+        strong { color: #fff; }
+
+        @media (max-width: 700px) {
+            body { padding: 22px 12px 40px; }
+            .container { padding: 15px; border-radius: 18px; }
+            .control-group {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .control-group input[type="range"] { width: 100%; }
+            .value-display { width: auto; text-align: left; }
+            canvas { height: 280px; }
+        }
+    </style>
+
+</head>
+<body>
+
+    <h1>A Jornada do Elétron</h1>
+    <p class="subtitle">Simulador de Mecânica Quântica para Nanocomputação</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab(1)">1. Elétron Livre</button>
+        <button class="tab-btn" onclick="showTab(2)">2. O Salto Quântico</button>
+        <button class="tab-btn" onclick="showTab(3)">3. Efeito Túnel</button>
+    </div>
+
+    <!-- Cenario 1: Eletron Livre -->
+    <div id="tab1" class="container active">
+        <h2>A Propagação Ideal (Onda Viajante)</h2>
+        <canvas id="canvas1"></canvas>
+        <div class="controls">
+            <div class="control-group">
+                <label>Energia / Momento (k):</label>
+                <input type="range" id="k1" min="1" max="10" value="3" oninput="updateVal('v-k1', this.value)">
+                <span id="v-k1" class="value-display">3</span>
+            </div>
+        </div>
+        <div class="description">
+            Sem forças agindo sobre ele (V=0), a função de onda do elétron evolui como uma onda plana contínua. 
+        </div>
+    </div>
+
+    <!-- Cenario 2: Poço Finito e Salto Quântico -->
+    <div id="tab2" class="container">
+        <h2>Do Confinamento ao Espectro Contínuo</h2>
+        <canvas id="canvas2"></canvas>
+        <div class="controls">
+            <div class="control-group">
+                <label>Energia do Elétron (E):</label>
+                <!-- Slider vai de 10 a 250. O poço tem altura 150. -->
+                <input type="range" id="E2" min="10" max="250" value="30" step="1">
+                <span id="v-E2" class="value-display">30</span>
+            </div>
+        </div>
+        <div class="description">
+            Enquanto a energia está abaixo do poço, ela é <strong>quantizada</strong> (só dá saltos discretos). 
+            Quando o elétron recebe energia suficiente para escapar da caixa, o espectro volta a ser <strong>contínuo</strong>.
+        </div>
+    </div>
+
+    <!-- Cenario 3: Efeito Tunel -->
+    <div id="tab3" class="container">
+        <h2>O Fantasma na Barreira (Efeito Túnel)</h2>
+        <canvas id="canvas3"></canvas>
+        <div class="controls">
+            <div class="control-group">
+                <label>Espessura da Barreira:</label>
+                <input type="range" id="w3" min="10" max="150" value="50" oninput="updateVal('v-w3', this.value)">
+                <span id="v-w3" class="value-display">50</span>
+            </div>
+            <div class="control-group">
+                <label>Altura da Barreira (V):</label>
+                <input type="range" id="h3" min="1" max="10" value="5" oninput="updateVal('v-h3', this.value)">
+                <span id="v-h3" class="value-display">5</span>
+            </div>
+        </div>
+        <div class="description">
+            A onda não zera na parede, ela decai exponencialmente. Se a parede for fina, o elétron "vaza" para o outro lado!
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabIndex) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab' + tabIndex).classList.add('active');
+            document.querySelectorAll('.tab-btn')[tabIndex - 1].classList.add('active');
+        }
+
+        function updateVal(id, val) {
+            document.getElementById(id).innerText = val + (id==='v-ox4'?' nm':'');
+        }
+
+        let time = 0;
+        const c1 = document.getElementById('canvas1'); const ctx1 = c1.getContext('2d');
+        const c2 = document.getElementById('canvas2'); const ctx2 = c2.getContext('2d');
+        const c3 = document.getElementById('canvas3'); const ctx3 = c3.getContext('2d');
+        
+        function resize() {
+            [c1, c2, c3].forEach(c => { c.width = c.parentElement.clientWidth - 40; c.height = 300; });
+        }
+        window.addEventListener('resize', resize);
+        resize();
+        function animate() {
+            time += 0.05;
+
+            // --- Cenário 1 ---
+            ctx1.clearRect(0, 0, c1.width, c1.height);
+            let k1 = parseFloat(document.getElementById('k1').value);
+            ctx1.beginPath();
+            ctx1.strokeStyle = '#00d2ff';
+            ctx1.lineWidth = 3;
+            for(let x = 0; x < c1.width; x++) {
+                let y = c1.height/2 + 50 * Math.sin(k1 * 0.02 * x - time*3);
+                x === 0 ? ctx1.moveTo(x, y) : ctx1.lineTo(x, y);
+            }
+            ctx1.stroke();
+
+            // --- Cenário 2: Poço Finito e Salto Quântico ---
+            ctx2.clearRect(0, 0, c2.width, c2.height);
+            let E_input = parseFloat(document.getElementById('E2').value);
+            let L2 = 200; 
+            let startX = (c2.width - L2) / 2;
+            let endX = startX + L2;
+            let baseY = c2.height - 40; 
+            let V0 = 150; // Altura do poço
+            
+            let E_actual = E_input;
+            let n = 1;
+            let isFree = false;
+
+            // Lógica do Salto Quântico
+            if (E_input < V0) {
+                // Energias discretas permitidas dentro do poço
+                let levels = [30, 80, 130]; 
+                // Acha o nível mais próximo (efeito "magnético")
+                E_actual = levels.reduce((prev, curr) => Math.abs(curr - E_input) < Math.abs(prev - E_input) ? curr : prev);
+                n = levels.indexOf(E_actual) + 1;
+            } else {
+                isFree = true; // Elétron livre!
+            }
+
+            // Atualiza display com a cor correspondente
+            let displayE2 = document.getElementById('v-E2');
+            displayE2.innerText = isFree ? "E=" + E_actual.toFixed(0) + " (Livre)" : "E=" + E_actual + " (n=" + n + ")";
+            displayE2.style.color = isFree ? "var(--free-color)" : "var(--accent)";
+
+            // 1. Desenhar a estrutura do Poço de Potencial
+            ctx2.strokeStyle = '#555';
+            ctx2.lineWidth = 2;
+            ctx2.beginPath();
+            ctx2.moveTo(0, baseY - V0);
+            ctx2.lineTo(startX, baseY - V0);
+            ctx2.lineTo(startX, baseY); // Desce a parede esquerda
+            ctx2.lineTo(endX, baseY);   // Fundo do poço
+            ctx2.lineTo(endX, baseY - V0); // Sobe a parede direita
+            ctx2.lineTo(c2.width, baseY - V0);
+            ctx2.stroke();
+
+            // 2. Desenhar a Linha tracejada da Energia (E)
+            let energyY = baseY - E_actual;
+            ctx2.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx2.setLineDash([5, 5]);
+            ctx2.beginPath();
+            ctx2.moveTo(0, energyY);
+            ctx2.lineTo(c2.width, energyY);
+            ctx2.stroke();
+            ctx2.setLineDash([]); 
+
+            // 3. Desenhar a Função de Onda
+            ctx2.beginPath();
+            ctx2.strokeStyle = isFree ? 'var(--free-color)' : 'var(--accent)';
+            ctx2.lineWidth = 3;
+
+            for(let x = 0; x < c2.width; x++) {
+                let y = energyY;
+                
+                if (!isFree) {
+                    // Estado Ligado: Onda só existe dentro do poço (estacionária)
+                    let amplitude = 40 * Math.sin(time * 2); 
+                    if (x >= startX && x <= endX) {
+                        let localX = x - startX;
+                        y -= amplitude * Math.sin((n * Math.PI * localX) / L2);
+                    }
+                } else {
+                    // Estado Livre: Onda se propaga livremente (viajante)
+                    // Frequência aumenta levemente com a energia acima da barreira
+                    let k = (E_actual - V0) * 0.05 + 0.05; 
+                    y -= 30 * Math.sin(k * x - time * 3);
+                }
+                
+                x === 0 ? ctx2.moveTo(x, y) : ctx2.lineTo(x, y);
+            }
+            ctx2.stroke();
+
+            // --- Cenário 3 ---
+            ctx3.clearRect(0, 0, c3.width, c3.height);
+            let w3 = parseFloat(document.getElementById('w3').value);
+            let h3 = parseFloat(document.getElementById('h3').value);
+            let bStart = c3.width/2 - w3/2;
+            let bEnd = bStart + w3;
+
+            ctx3.fillStyle = 'rgba(255, 51, 102, 0.3)';
+            ctx3.fillRect(bStart, c3.height/2 - h3*15, w3, h3*30);
+
+            ctx3.beginPath();
+            ctx3.strokeStyle = '#00d2ff';
+            ctx3.lineWidth = 3;
+            
+            let A_in = 60; 
+            let decay = Math.exp(-h3 * 0.02 * w3); 
+            let A_out = A_in * decay;
+
+            for(let x = 0; x < c3.width; x++) {
+                let y = c3.height/2;
+                if(x < bStart) {
+                    y += A_in * Math.sin(0.05 * x - time*2);
+                } else if (x >= bStart && x <= bEnd) {
+                    let localX = x - bStart;
+                    let currentA = A_in * Math.exp(-h3 * 0.02 * localX);
+                    y += currentA * Math.sin(0.05 * x - time*2);
+                } else {
+                    y += A_out * Math.sin(0.05 * x - time*2);
+                }
+                x === 0 ? ctx3.moveTo(x, y) : ctx3.lineTo(x, y);
+            }
+            ctx3.stroke();
+
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
