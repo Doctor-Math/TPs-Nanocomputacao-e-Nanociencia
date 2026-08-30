@@ -17,7 +17,7 @@ Pasta do Trabalho 1 (**TP1**) da disciplina de **Nanocomputação e Nanotecnolog
 ---
 
 ## 🔬 Sobre o Projeto
-Este projeto consiste na criação de um material didático interativo voltado para o ensino dos princípios fundamentais da nanociência e da introdução à mecânica quântica[cite: 1]. Através de uma simulação visual construída em HTML5 e JavaScript, o simulador **"A Jornada do Elétron"** demonstra como as regras do mundo macroscópico de Newton dão lugar aos fenômenos ondulatórios e quânticos em nanoescala.
+Este projeto consiste na criação de um material didático interativo voltado para o ensino dos princípios fundamentais da nanociência e da introdução à mecânica quântica. Através de uma simulação visual construída em HTML5 e JavaScript, o simulador **"A Jornada do Elétron"** demonstra como as regras do mundo macroscópico de Newton dão lugar aos fenômenos ondulatórios e quânticos em nanoescala.
 
 ### 🌟 Cenários Disponíveis no Simulador
 1. **Elétron Livre ($V=0$):** Demonstra a propagação da função de onda de um elétron livre sob ausência de forças externas, obedecendo à Equação de Schrödinger e evidenciando o comportamento ondulatório previsto por De Broglie ($\lambda = h/p$).
@@ -27,7 +27,7 @@ Este projeto consiste na criação de um material didático interativo voltado p
 ---
 
 ## 📂 Estrutura de Arquivos
-* `A_Jornada_do_Eletron_mesmo_conteudo_novo_design.html`: Arquivo principal contendo a aplicação web interativa (simulador com os três cenários e estilização avançada).
+* `A_Jornada_do_Eletron.html`: Arquivo principal contendo a aplicação web interativa (simulador com os três cenários e estilização avançada).
 * `A Jornada do Elétron - slides TP1.pdf`: Apresentação em slides utilizada para o suporte teórico e gravação do pitch de apresentação.
 
 ---
