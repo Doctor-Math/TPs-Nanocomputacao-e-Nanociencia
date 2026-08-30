@@ -1,12 +1,12 @@
 # A Jornada do Elétron — Simulador Interativo de Mecânica Quântica
 
-Repositório do Trabalho 1 (**TP1**) da disciplina de **Nanocomputação e Nanotecnologia Computacional** da Universidade Federal de Minas Gerais (**UFMG**).
+Pasta do Trabalho 1 (**TP1**) da disciplina de **Nanocomputação e Nanotecnologia Computacional** da Universidade Federal de Minas Gerais (**UFMG**).
 
 ## 👥 Autores
-* Gabrielly Santos
-* Julia Luna
-* Mateus Amaral
-* Matheus Soares dos Santos de Freitas
+* [Gabrielly Santos](https://github.com/gabyxsantos)
+* [Julia Luna](https://github.com/Julialunna)
+* [Mateus Amaral](https://github.com/MateusAmaralDaSilva)
+* [Matheus Soares dos Santos de Freitas](https://github.com/Doctor-Math)
 
 ---
 
