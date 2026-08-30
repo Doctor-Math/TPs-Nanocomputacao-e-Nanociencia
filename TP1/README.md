@@ -20,9 +20,27 @@ Pasta do Trabalho 1 (**TP1**) da disciplina de **Nanocomputação e Nanotecnolog
 Este projeto consiste na criação de um material didático interativo voltado para o ensino dos princípios fundamentais da nanociência e da introdução à mecânica quântica. Através de uma simulação visual construída em HTML5 e JavaScript, o simulador **"A Jornada do Elétron"** demonstra como as regras do mundo macroscópico de Newton dão lugar aos fenômenos ondulatórios e quânticos em nanoescala.
 
 ### 🌟 Cenários Disponíveis no Simulador
+
 1. **Elétron Livre ($V=0$):** Demonstra a propagação da função de onda de um elétron livre sob ausência de forças externas, obedecendo à Equação de Schrödinger e evidenciando o comportamento ondulatório previsto por De Broglie ($\lambda = h/p$).
+   
+   <p align="center">
+     <img width="800" alt="Cenário de Elétron Livre" src="Imagens_simulador/cenario_eletron_livre.png"><br>
+     <em>Figura 1: Simulação da propagação da onda de um elétron livre.</em>
+   </p>
+
 2. **O Salto Quântico (Poço de Potencial Finito):** Explora o confinamento quântico. Quando a energia está abaixo da altura do poço, os estados são quantizados ($n=1, 2, 3\dots$). Ao receber energia suficiente para superar a barreira, o espectro do elétron torna-se contínuo.
+   
+   <p align="center">
+     <img width="800" alt="Cenário de Poço de Potencial Finito" src="Imagens_simulador/cenario_poco_infinito.png"><br>
+     <em>Figura 2: Confinamento quântico e transição para o espectro contínuo.</em>
+   </p>
+
 3. **Efeito Túnel:** Simula o comportamento da onda quântica ao encontrar uma barreira de potencial. Em vez de refletir completamente como na física clássica, a função de onda decai exponencialmente, permitindo que o elétron "vaze" para o outro lado se a barreira for fina o suficiente.
+   
+   <p align="center">
+     <img width="800" alt="Cenário de Efeito Túnel" src="Imagens_simulador/cenario_efeito_tunel.png"><br>
+     <em>Figura 3: Decaimento exponencial da onda através de uma barreira de potencial.</em>
+   </p>
 
 ---
 
