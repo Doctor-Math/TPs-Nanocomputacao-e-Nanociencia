@@ -56,4 +56,4 @@ Este projeto consiste na criação de um material didático interativo voltado p
 2. Abra qualquer um dos arquivos HTML diretamente em um navegador web moderno (Google Chrome, Firefox, Edge, etc.).
 3. Para executar a simulação do efeito túnel, abra especificamente o arquivo `simulacao_efeito_tunel.html`.
 4. Interaja com os controles de espessura e altura da barreira para observar em tempo real o comportamento da função de onda durante o fenômeno de tunelamento quântico.
-5. Caso queira ver a versão completa do projeto, abra `A_Jornada_do_Eletron_mesmo_conteudo_novo_design.html` ou `A_Jornada_do_Eletron.html`.
+5. Caso queira ver a versão completa do projeto, abra `A_Jornada_do_Eletron.html` e `simulacao_efeito_tunel.html`.
