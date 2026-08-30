@@ -23,6 +23,6 @@ Cada pasta presente neste repositório corresponde a um Trabalho Prático espec�
 ---
 
 ## 🛠️ Tecnologias Utilizadas
-* **HTML5 / JavaScript / CSS3** (Desenvolvimento de simulações e materiais didáticos interativos)[cite: 1]
+* **HTML5 / JavaScript / CSS3** (Desenvolvimento de simulações e materiais didáticos interativos)
 * **Python / Jupyter Notebook** (Conforme aplicável aos módulos computacionais)
 * **Git & GitHub** (Controle de versão e colaboração)
