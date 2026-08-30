@@ -15,7 +15,7 @@ Repositório centralizado contendo os Trabalhos Práticos (TPs) desenvolvidos pa
 Cada pasta presente neste repositório corresponde a um Trabalho Prático específico da disciplina:
 
 * 📁 **[TP1](./TP1)**
-  * **Tema:** Material didático interativo ("A Jornada do Elétron")[cite: 1] — Introdução à Mecânica Quântica, Equação de Schrödinger e Efeito Túnel[cite: 1, 2].
+  * **Tema:** Material didático interativo ("A Jornada do Elétron") — Introdução à Mecânica Quântica, Equação de Schrödinger e Efeito Túnel.
   * **Conteúdos:** Simulador web em HTML5/JavaScript, slides de apresentação e link para o pitch em vídeo.
 
 *(Futuros TPs serão organizados em novas pastas padronizadas conforme o andamento da disciplina).*
