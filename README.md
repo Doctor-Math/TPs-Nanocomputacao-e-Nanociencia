@@ -3,10 +3,10 @@
 Repositório centralizado contendo os Trabalhos Práticos (TPs) desenvolvidos para a disciplina de **Nanocomputação e Nanotecnologia Computacional** da Universidade Federal de Minas Gerais (**UFMG**).
 
 ## 👥 Autores
-* Gabrielly Santos
-* Julia Luna
-* Mateus Amaral
-* Matheus Soares dos Santos de Freitas
+* [Gabrielly Santos](https://github.com/gabyxsantos)
+* [Julia Luna](https://github.com/Julialunna)
+* [Mateus Amaral](https://github.com/MateusAmaralDaSilva)
+* [Matheus Soares dos Santos de Freitas](https://github.com/Doctor-Math)
 
 ---
 
