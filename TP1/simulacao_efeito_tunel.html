@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulação — Efeito Túnel</title>
+<style>
+:root{
+  --bg:#071019; --panel:#0d1823; --line:#223646; --text:#f4f8fb; --muted:#a5b8c5;
+  --cyan:#4bdcff; --gold:#ffd166; --blue:#8196ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at 80% 0%, #143149 0, #071019 32%, #04090e 78%);
+}
+.wrap{width:min(1120px,96vw); margin:auto; padding:24px 0 40px}
+.hero{padding:6px 10px 18px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-weight:800}
+h1{font-size:clamp(32px,6vw,58px);line-height:.95;letter-spacing:-.05em;margin:10px 0 12px}
+.hero p{max-width:860px;color:#bfd0dd;font-size:18px;line-height:1.55;margin:0}
+.panel{
+  background:linear-gradient(180deg,rgba(15,29,42,.98),rgba(8,17,25,.98));
+  border:1px solid var(--line); border-radius:24px; padding:18px;
+  box-shadow:0 18px 60px rgba(0,0,0,.25);
+}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+h2{font-size:clamp(22px,4vw,36px);margin:0}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ctrl{min-width:165px}
+.ctrl label{display:flex;justify-content:space-between;color:#c8d5df;font-size:12px;margin-bottom:4px}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+button{
+  border:1px solid #2a4659;background:#102332;color:white;border-radius:10px;
+  padding:8px 10px;cursor:pointer
+}
+button:hover{background:#173147}
+canvas{display:block;width:100%;height:420px;background:#07111a;border-radius:16px}
+.note{color:var(--muted);font-size:12px;line-height:1.45;margin-top:10px}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.card{background:#0a1721;border:1px solid #203646;border-radius:16px;padding:14px}
+.card h3{margin:0 0 8px}
+.card p{margin:0;color:#c2d0da;line-height:1.55}
+.key{
+  margin-top:16px; border-left:3px solid var(--cyan); background:rgba(75,220,255,.07);
+  padding:14px 16px; border-radius:10px; color:#dce8f0; line-height:1.55
+}
+@media(max-width:850px){
+  .cards{grid-template-columns:1fr}
+  canvas{height:320px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Nanocomputação · Efeito Túnel</div>
+    <h1>Função de onda na barreira</h1>
+    <p>Aa simulação mostra apenas a <b>função de onda</b>. A ideia principal é observar que, se a onda não cair a zero antes do fim da barreira, ainda existe amplitude do outro lado e, portanto, existe probabilidade de transmissão.</p>
+  </div>
+
+  <div class="panel">
+    <div class="top">
+      <h2>Simulação da função de onda</h2>
+      <div class="controls">
+        <button id="play">Pausar</button>
+        <button id="reset">Reset</button>
+        <button id="thin">Barreira fina</button>
+        <button id="thick">Barreira grossa</button>
+      </div>
+    </div>
+
+    <div class="controls" style="margin-bottom:12px">
+      <div class="ctrl">
+        <label>Energia E <b id="eVal">4.0</b></label>
+        <input id="e" type="range" min="1" max="9" step="0.1" value="4">
+      </div>
+      <div class="ctrl">
+        <label>Altura V₀ <b id="vVal">8.0</b></label>
+        <input id="v" type="range" min="2" max="12" step="0.1" value="8">
+      </div>
+      <div class="ctrl">
+        <label>Largura a <b id="aVal">0.45</b></label>
+        <input id="a" type="range" min="0.08" max="1.20" step="0.01" value="0.45">
+      </div>
+    </div>
+
+    <canvas id="sim"></canvas>
+    <div class="note" id="note"></div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Antes da barreira</h3>
+        <p>A função de onda incidente oscila normalmente na região permitida.</p>
+      </div>
+      <div class="card">
+        <h3>Dentro da barreira</h3>
+        <p>Para E &lt; V₀, a onda continua evoluindo no tempo, mas sua amplitude decai dentro da barreira.</p>
+      </div>
+      <div class="card">
+        <h3>Depois da barreira</h3>
+        <p>Se ainda existir amplitude depois da barreira, então existe probabilidade de detectar o elétron do outro lado.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById('sim'), ctx=canvas.getContext('2d');
+const E=document.getElementById('e'), V=document.getElementById('v'), A=document.getElementById('a');
+let t=0, paused=false;
+
+function fit(){
+  const r=canvas.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.round(r.width*d); canvas.height=Math.round(r.height*d);
+  ctx.setTransform(d,0,0,d,0,0); return [r.width,r.height];
+}
+function trans(e,v,a){
+  if(e>=v) return 0.82;
+  const k=2.45*Math.sqrt(Math.max(.001,v-e));
+  return Math.exp(-2*k*a);
+}
+function drawBackground(w,h){
+  ctx.fillStyle='#07111a'; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle='rgba(130,170,200,.07)';
+  for(let x=0;x<w;x+=45){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=0;y<h;y+=45){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+}
+function draw(){
+  const [w,h]=fit();
+  drawBackground(w,h);
+
+  const e=+E.value, v=+V.value, a=+A.value, T=trans(e,v,a);
+  document.getElementById('eVal').textContent=e.toFixed(1);
+  document.getElementById('vVal').textContent=v.toFixed(1);
+  document.getElementById('aVal').textContent=a.toFixed(2);
+
+  const mid=h*.55, base=h*.84, scale=(h*.56)/12;
+  const yV=base-v*scale, yE=base-e*scale;
+  const bx=w*.48, bw=55+a*w*.18;
+
+  // barrier
+  ctx.fillStyle='rgba(255,209,102,.18)';
+  ctx.fillRect(bx,yV,bw,base-yV);
+  ctx.strokeStyle='#ffd166'; ctx.lineWidth=2;
+  ctx.strokeRect(bx,yV,bw,base-yV);
+
+  // energy line
+  ctx.setLineDash([6,6]); ctx.strokeStyle='#8196ff';
+  ctx.beginPath(); ctx.moveTo(16,yE); ctx.lineTo(w-16,yE); ctx.stroke(); ctx.setLineDash([]);
+
+  ctx.fillStyle='#dce7ee'; ctx.font='12px system-ui';
+  ctx.fillText('função incidente', 20, 22);
+  ctx.fillStyle='#ffd166'; ctx.fillText('barreira V₀', bx+8, Math.max(16,yV-7));
+  ctx.fillStyle='#8196ff'; ctx.fillText('energia E', w-82, yE-8);
+
+  // incident region
+  ctx.strokeStyle='#4bdcff'; ctx.lineWidth=2.6; ctx.beginPath();
+  for(let x=20;x<=bx;x+=2){
+    const y=mid+24*Math.sin((x-bx)*.065-t*2.1);
+    x===20?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // in barrier
+  // A onda dentro da barreira deve acompanhar a evolução temporal da onda incidente,
+  // mudando principalmente na amplitude, que decai exponencialmente.
+  ctx.strokeStyle='#ffd166'; ctx.lineWidth=2.5; ctx.beginPath();
+  for(let x=bx;x<=bx+bw;x+=2){
+    const u=(x-bx)/bw;
+    const decay = e<v ? Math.exp(-3.4*a*Math.sqrt(Math.max(.1,v-e))*u) : 0.82;
+    const phase = (x-bx)*0.065 - t*2.1;
+    const y=mid+24*decay*Math.sin(phase);
+    x===bx?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // transmitted region
+  const amp=24*Math.sqrt(T);
+  ctx.strokeStyle='#4bdcff'; ctx.lineWidth=2.6; ctx.beginPath();
+  for(let x=bx+bw;x<w-18;x+=2){
+    const y=mid+amp*Math.sin((x-bx-bw)*.065-t*2.1);
+    x===bx+bw?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // small fills for clarity
+  ctx.fillStyle='rgba(75,220,255,.07)';
+  ctx.fillRect(0, mid-38, bx, 76);
+  ctx.fillStyle='rgba(255,209,102,.08)';
+  ctx.fillRect(bx, mid-28, bw, 56);
+  ctx.fillStyle='rgba(75,220,255,.05)';
+  ctx.fillRect(bx+bw, mid-34, w-(bx+bw), 68);
+
+  // labels
+  ctx.fillStyle='#c3d1db';
+  ctx.fillText('região permitida', 20, h-18);
+  ctx.fillStyle='#ffd166';
+  ctx.fillText('decaimento na barreira', bx+8, h-18);
+  ctx.fillStyle='#4bdcff';
+  ctx.fillText('amplitude transmitida', bx+bw+8, 22);
+
+  const msg = e<v
+    ? `E < V₀. Dentro da barreira a função de onda decai, mas não zera instantaneamente. Se ela não chegar a zero antes do fim da barreira, ainda existe amplitude do outro lado. Transmissão conceitual ≈ ${(100*T).toFixed(T<.001?4:2)}%.`
+    : `E ≥ V₀. Aqui a energia já é suficiente para atravessar a barreira; isso já não representa o caso típico de tunelamento abaixo da barreira.`;
+  document.getElementById('note').textContent = msg;
+}
+function loop(){ if(!paused) t+=.016; draw(); requestAnimationFrame(loop); }
+
+[E,V,A].forEach(el=>el.addEventListener('input',draw));
+document.getElementById('play').onclick=()=>{
+  paused=!paused;
+  document.getElementById('play').textContent=paused?'Continuar':'Pausar';
+};
+document.getElementById('reset').onclick=()=>{ E.value=4; V.value=8; A.value=.45; t=0; draw(); };
+document.getElementById('thin').onclick=()=>{ E.value=4; V.value=8; A.value=.18; t=0; draw(); };
+document.getElementById('thick').onclick=()=>{ E.value=4; V.value=8; A.value=.95; t=0; draw(); };
+addEventListener('resize',draw);
+draw(); requestAnimationFrame(loop);
+</script>
+</body>
+</html>
