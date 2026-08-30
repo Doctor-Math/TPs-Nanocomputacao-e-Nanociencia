@@ -12,6 +12,7 @@ Repositório do Trabalho 1 (**TP1**) da disciplina de **Nanocomputação e Nanot
 
 ## 🎥 Pitch de Apresentação
 * **Assista ao vídeo do pitch:** [Acessar Vídeo no Google Drive](https://drive.google.com/file/d/1asvR7Ew_bNQ84-mh07LEDRbv_SOyexnI/view?usp=sharing)
+* [Acessar Vídeo no YouTube](https://youtu.be/DuB2aPloLbY?si=Q4YN8kjr-EobP3MY)
 
 ---
 
