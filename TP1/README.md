@@ -27,12 +27,15 @@ Este projeto consiste na criação de um material didático interativo voltado p
 ---
 
 ## 📂 Estrutura de Arquivos
-* `A_Jornada_do_Eletron.html`: Arquivo principal contendo a aplicação web interativa (simulador com os três cenários e estilização avançada).
+* `A_Jornada_do_Eletron.html`: Arquivo principal contendo a aplicação web interativa com os três cenários e estilização avançada.
+* `simulacao_efeito_tunel.html`: Arquivo específico da simulação do efeito túnel, com a visualização da onda atravessando uma barreira de potencial.
 * `A Jornada do Elétron - slides TP1.pdf`: Apresentação em slides utilizada para o suporte teórico e gravação do pitch de apresentação.
 
 ---
 
 ## 🚀 Como Executar
 1. Clone este repositório ou faça o download dos arquivos.
-2. Abra o arquivo `A_Jornada_do_Eletron_mesmo_conteudo_novo_design.html` diretamente em qualquer navegador web moderno (Google Chrome, Firefox, Edge, etc.).
-3. Interaja com os seletores de parâmetros (energia, momento, largura e altura de barreiras) para observar em tempo real as mudanças no comportamento da função de onda.
+2. Abra qualquer um dos arquivos HTML diretamente em um navegador web moderno (Google Chrome, Firefox, Edge, etc.).
+3. Para executar a simulação do efeito túnel, abra especificamente o arquivo `simulacao_efeito_tunel.html`.
+4. Interaja com os controles de espessura e altura da barreira para observar em tempo real o comportamento da função de onda durante o fenômeno de tunelamento quântico.
+5. Caso queira ver a versão completa do projeto, abra `A_Jornada_do_Eletron_mesmo_conteudo_novo_design.html` ou `A_Jornada_do_Eletron.html`.
